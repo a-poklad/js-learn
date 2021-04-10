@@ -5,11 +5,14 @@ Get the first name and last name from the user using the prompt box and display 
 
 function welcomeUser() {
     const getName = prompt('Enter your full name')
-    const result = (!getName) ? 'Hello unknown!' : `Hello ${getName}!`
-
-    return console.log(result)
+    return (!getName) ? 'Hello unknown!' : `Hello ${getName}!`
+    // suggested
+    // const result = !getName ? 'Hello unknown!' : `Hello ${getName}!`
+    // const result = getName ? `Hello ${getName}!` : 'Hello unknown!';
+    // const result = `Hello ${getName || "unknown"}!`
 }
- welcomeUser()
+const result = welcomeUser()
+console.log(result)
 
 /**
 2) Compare Strings
@@ -51,8 +54,11 @@ e.g “Parvez” should return “zevrap”.
 function reverseStr() {
    const str = prompt('Enter word')
    const result = (!str) ? 'Enter word, please!' : str.split('').reverse().join('')
-
-    return console.log(result)
+// Suggested
+//    if(!str) {
+//      return 'Enter word, please!';
+//    }
+//    return str.split('').reverse().join('')
 }
 // reverseStr()
 
@@ -64,11 +70,14 @@ function reverseStr() {
 */
 
 function DrEvil(number) {
-   
+   //if(!isFinite(number)) {
    if(isNaN(number)) {
        return console.log('Not a number!')
+   // remove else
    } else {
        const million = 1000000;
+       // strict equal
+       // if(number === million) {
        if(number == million) {
            return console.log(`${number} dollars (pinky)`)
        } else {
@@ -80,10 +89,11 @@ function DrEvil(number) {
 
 /**
 6) Create a function called mixUp. It should take in two strings, and return the concatenation of the two strings (separated by a space) slicing out and swapping the first 2 characters of each. You can assume that the strings are at least 2 characters long. For example:
- mixUp('mix', pod'): 'pox mid'
+ mixUp('mix', 'pod'): 'pox mid'
  mixUp('dog', 'dinner'): 'dig donner'
 */
 
+// doesn't work
 function mixUp(str1, str2) {
 
    const result = (!str1) ? '' : str1 + ' ' + str2
@@ -102,6 +112,7 @@ function mixUp(str1, str2) {
 
  function verbing(str) {
      if(str.length >= 3) {
+       // str.endsWith('ing')
          if(str.slice(-3) == 'ing') {
              console.log(str + 'ly')
          } else {
