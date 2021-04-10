@@ -9,7 +9,7 @@ function welcomeUser() {
 
     return console.log(result)
 }
-//  welcomeUser()
+ welcomeUser()
 
 /**
 2) Compare Strings
@@ -18,7 +18,7 @@ Get two values from the user ‘password’ and ‘confirm password’  using th
 
 function comparePassword() {
    const password = prompt('Enter password');
-   const confirmPassword = prompt('Confirm password');
+   const confirmPassword = prompt('Confirm password')
    if (password === confirmPassword) {
        return console.log('Password validated')
    } else {
@@ -49,8 +49,8 @@ e.g “Parvez” should return “zevrap”.
 */
 
 function reverseStr() {
-   const str = prompt('Enter word');
-   const result = (!str) ? 'Enter word, please!' : str.split('').reverse().join('');
+   const str = prompt('Enter word')
+   const result = (!str) ? 'Enter word, please!' : str.split('').reverse().join('')
 
     return console.log(result)
 }
@@ -134,6 +134,6 @@ function notBad(str) {
         console.log(str)
     }
 }
-notBad('This dinner is not that bad!')
-notBad('This movie is not so bad!')
-notBad('This dinner is bad!')
+// notBad('This dinner is not that bad!')
+// notBad('This movie is not so bad!')
+// notBad('This dinner is bad!')
