@@ -15,6 +15,8 @@ console.log(is_array([1, 2, 4, 0]))
  */
 console.log('Arr-2--------------------------')
 function array_Clone(arr) {
+    //return [...arr]
+    //return [].concat(arr);
     return arr.slice()
 }
 console.log(array_Clone([1, 2, 4, 0]))
@@ -132,7 +134,7 @@ var library = [
 function checkReadBooks(library) {
     library.forEach(element => {
         let status = element.readingStatus ? 'I have read ' : 'I haven\'t read '
-        return console.log(status + element.title + ' by ' + element.author)
+        console.log(status + element.title + ' by ' + element.author)
     });
 }
 // checkReadBooks(library)
