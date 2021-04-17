@@ -66,6 +66,9 @@ let sumAllPopulation = 0
 data.forEach(item => sumAllPopulation += item.population)
 console.log(sumAllPopulation)
 
+let sumAllPopulation2 = data.reduce((total, item) => total + item.population, 0)
+console.log(sumAllPopulation2)
+
 //3) find city with name "Libas"
 let cityLibas = data.find(item => item.name === 'Libas')
 console.log(cityLibas)
