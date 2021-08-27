@@ -1,3 +1,3 @@
-import inputC from './inputC';
+import InputF from './InputF';
 
-export default inputC;
+export default InputF;

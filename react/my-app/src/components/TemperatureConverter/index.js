@@ -1,3 +1,3 @@
-import Data from './Data';
+import TemperatureConverter from './TemperatureConverter';
 
-export default Data;
+export default TemperatureConverter;

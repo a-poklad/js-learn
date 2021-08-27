@@ -1,100 +1,106 @@
-// let getUserData = (url) => {
-//     fetch(url)
-//         .then(res => res.json())
-//         .then(result => result.data.map(item => fetch(`https://reqres.in/api/users/${item.id}`)))
-//         .then(getUsers => Promise.all(getUsers))
-//         .then(res => res)
-//         .then(resp => Promise.all(resp.map(item => item.json())))
-//         .then(users => {
-//             const usersArr = users.map(user => user.data.first_name)
-//             console.log(usersArr)
-//         })
-//         .catch(err => {
-//             console.log(err)
-//         })
-// }
-//
-//
-// getUserData('https://reqres.in/api/users?page=2')
+function sumNumbers(str) {
+    const strArr = str.split(' ')
+    let sumNumbers = 0
+
+    strArr.forEach((item) => {
+        if (Number(item)) {
+            sumNumbers += Number(item)
+        }
+    }, 0)
+
+    return sumNumbers
+}
+
+// console.log(sumNumbers('hi'));
+// console.log(sumNumbers('my numbers is 2'));
+// console.log(sumNumbers('This picture is an oil on canvas '
+//     + 'painting by Danish artist Anna '
+//     + 'Petersen between 1845 and 1910 year'));
 
 
-// function isPalindrom(e){
-//     if (e < 0 ) {
-//         e *= -1;
-//     }
-//     if (Number.isInteger(e)){
-//         let x = e.toString();
+// function threeWords(text) {
+//     const textArr = text.split(' ')
+//     let countWordsArr = []
 //
-//         let revers = x.split('').reverse().join('');
-//         if ( x === revers){
-//             return true
+//     textArr.forEach(item => {
+//         if(!Number(item)) {
+//             countWordsArr.push(item)
+//             if(countWordsArr.length >= 3) {
+//                 return true
+//             }
+//         } else {
+//             countWordsArr = []
 //         }
-//         return false
-//     }
-// }
-
-// function isPalindrom(e) {
+//     })
 //
-//     if (!isFinite(e)) {
-//         return false;
-//     }
-//     const numAbs = Math.abs(e);
-//     const x = numAbs.toString();
-//     const revers = x.split('').reverse().join('');
-//     return x === revers;
+//     return false
 // }
 //
-// console.log(isPalindrom(101))
-// console.log(isPalindrom(-101))
+//
+// console.log(threeWords("Hello World hello"))
+// console.log(threeWords("He is 123 man"))
 
-// function User(name, isAdmin) {
-//     this.name = name
-//     this.isAdmin = isAdmin
+
+const getNeedArrayProperties = (arr1, arr2) => {
+    const resultArr = arr1.map(item => {
+        const newObj = {}
+
+        arr2.forEach(key => {
+            if (item.hasOwnProperty(key)) {
+                newObj[key] = item[key]
+            }
+        })
+
+        // for(let key in item) {
+        //     if(arr2.includes(key)) {
+        //         newObj[key] = item[key]
+        //     }
+        // }
+        return newObj
+    })
+    return resultArr.filter(item => JSON.stringify(item) !== '{}')
+}
+
+// getNeedArrayProperties([{a: 1, b: 2, c: 3}, {}, {d: 4} ], ["a", "c"]) // [{a: 1, c: 3}, {}, {}]
+// console.log(getNeedArrayProperties([{a: 1, b: 2, c: 3}, {}, {d: 4} ], ["a", "c"]))
+
+
+//homework
+// [{a: [1, 2, 3]}, {a: [1, 2, 3, 2]}] -> [{a: [1, 2, 3]}, {a: [1, 2, 3]}]
+// {b: [5, 8, 1, 3, 5]} -> {b: [1, 3, 5, 8]}
+
+// const someSortArr = (arr) => {
+//     return arr.map(item => {
+//         for(let key in item) {
+//             if (item.hasOwnProperty(key)) {
+//                 item[key] = [...new Set(item[key])].sort((a, b) => a - b)
+//             }
+//         }
+//         return item
+//     })
 // }
-//
-// User.prototype.checkUserIsAdmin = function () {
-//     if(this.isAdmin) {
-//         return `${this.name}  - is admin`
-//     }
-//     return `${this.name}  - is not admin`
-// }
-//
-// const vlad = new User('Vlad', true)
-// console.log(vlad.checkUserIsAdmin())
-//
-// const vasya = new User('Vasya', false)
-// console.log(vasya.checkUserIsAdmin())
+// console.log(someSortArr([{a: [1, 2, 3]}, {a: [1, 2, 3, 2]}]))
 
+const someSortObj = (arr) => {
 
-const user = {
-    name: 'Black'
+    return arr.map(obj => {
+        for(let key in obj) {
+            if (obj.hasOwnProperty(key)) {
+                // newObj[key] = [...new Set(newObj[key])].sort((a, b) => a - b)
+                if(Array.isArray(obj[key])) {
+                    const resArr = []
+                    obj[key].forEach((item) => {
+                        if(!resArr.includes(item)) {
+                            resArr.push(item)
+                        }
+                    })
+                    obj[key] = resArr.sort((a, b) => a - b)
+                }
+
+            }
+        }
+        return obj
+    })
+
 }
-
-function inherit(obj) {
-    function NewInherit() {}
-    NewInherit.prototype.name = obj.name
-    return new NewInherit()
-}
-
-
-function checkUserIsAdmin(user) {
-    if(user.isAdmin) {
-        return `${user.name}  - is admin`
-    }
-    return `${user.name}  - is not admin`
-}
-
-const userAdmin = inherit(user)
-userAdmin.isAdmin = true
-
-const userGuest = {
-    name: 'Jon'
-}
-const userGuestFirst = inherit(userGuest)
-userGuest.isAdmin = false
-
-
-
-
-console.log(checkUserIsAdmin(userAdmin))
-console.log(checkUserIsAdmin(userGuestFirst))
+// console.log(someSortObj([{a: [1, 2, 3, 2]}, {b: [5, 8, 1, 3, 5]}]))

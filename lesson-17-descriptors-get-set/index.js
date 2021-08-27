@@ -79,9 +79,28 @@ function User(fullName) {
 
 const user1 = new User('Alex Key')
 
-console.log(user1.firstName)
-console.log(user1.lastName)
+// console.log(user1.firstName)
+// console.log(user1.lastName)
 
+
+
+const add = (a) => {
+    let result = a
+    let fn = function(b) {
+        if(!b) {
+            result += 0
+        } else {
+            result += b
+        }
+        return fn
+    }
+
+    fn.toString = () => result
+
+    return fn
+}
+
+add(2)(2)(4)
 
 
 
