@@ -22,8 +22,8 @@ const palindrome = number => {
 
 }
 
-// console.log(palindrome(121))
-// console.log(palindrome(-121))
+console.log(palindrome(121))
+console.log(palindrome(-121))
 // console.log(palindrome(10))
 // console.log(palindrome(101))
 
@@ -38,9 +38,9 @@ let obj2 = {
     }
 }
 obj2 = {}
-let {a: {b: {c: {d = 2} = {}} = {}} = {}} = obj2
+// let {a: {b: {c: {d = 2} = {}} = {}} = {}} = obj2
 
-let d = obj2?.a?.b?.c?.d || 3
+// let d = obj2?.a?.b?.c?.d || 3
 
 // console.log(d)
 
@@ -48,6 +48,6 @@ let arr = [{a: {b: 4}}]
 
 arr = []
 
-let [{a: {b = 3} = {}} = {}] = arr
+// let [{a: {b = 3} = {}} = {}] = arr
 
 // console.log(b)
