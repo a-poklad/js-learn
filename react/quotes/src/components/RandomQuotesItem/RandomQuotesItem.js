@@ -17,11 +17,19 @@ function RandomQuotesItem(props) {
 }
 
 RandomQuotesItem.propTypes = {
-  itemQuote: PropTypes.objectOf(PropTypes.object),
+  itemQuote: PropTypes.oneOfType({
+    id: PropTypes.number,
+    name: PropTypes.string,
+    quote: PropTypes.string,
+  }),
 };
 
 RandomQuotesItem.defaultProps = {
-  itemQuote: {},
+  itemQuote: {
+    id: 0,
+    name: '',
+    quote: '',
+  },
 };
 
 export default RandomQuotesItem;

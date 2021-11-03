@@ -7,32 +7,45 @@ import {
   UndoOutlined,
 } from '@ant-design/icons';
 import PropTypes from 'prop-types';
+import BUTTON_STATE from '../../constans/constans';
+
+const getIcon = (buttonState) => {
+  if (buttonState === BUTTON_STATE.UP) {
+    return <SortAscendingOutlined />;
+  }
+  if (buttonState === BUTTON_STATE.DOWN) {
+    return <SortDescendingOutlined />;
+  }
+  return '';
+};
 
 function SortingQuotes(props) {
   const {
-    handleSortListUp,
-    handleSortListDown,
+    handleSortList,
     handleReset,
+    quoteSortingButtonState,
+    nameSortingButtonState,
   } = props;
   return (
     <div className="App-sort-btn-wr">
+      {}
       <Button
         className="App-sort-btn"
         type="primary"
-        icon={<SortAscendingOutlined />}
+        icon={getIcon(nameSortingButtonState)}
         size="large"
-        onClick={handleSortListDown}
+        onClick={() => handleSortList('name')}
       >
         Sort by name
       </Button>
       <Button
         className="App-sort-btn"
         type="primary"
-        icon={<SortDescendingOutlined />}
+        icon={getIcon(quoteSortingButtonState)}
         size="large"
-        onClick={handleSortListUp}
+        onClick={() => handleSortList('quote')}
       >
-        Sort by name
+        Sort by quote
       </Button>
       <Button
         className="App-sort-btn"
@@ -48,15 +61,33 @@ function SortingQuotes(props) {
 }
 
 SortingQuotes.propTypes = {
-  handleSortListUp: PropTypes.func,
-  handleSortListDown: PropTypes.func,
+  handleSortList: PropTypes.func,
   handleReset: PropTypes.func,
+  quoteSortingButtonState: PropTypes.oneOfType({
+    UP: PropTypes.string,
+    DOWN: PropTypes.string,
+    DEFAULT: PropTypes.string,
+  }),
+  nameSortingButtonState: PropTypes.oneOfType({
+    UP: PropTypes.string,
+    DOWN: PropTypes.string,
+    DEFAULT: PropTypes.string,
+  }),
 };
 
 SortingQuotes.defaultProps = {
-  handleSortListUp: () => {},
-  handleSortListDown: () => {},
+  handleSortList: () => {},
   handleReset: () => {},
+  quoteSortingButtonState: {
+    UP: '',
+    DOWN: '',
+    DEFAULT: '',
+  },
+  nameSortingButtonState: {
+    UP: '',
+    DOWN: '',
+    DEFAULT: '',
+  },
 };
 
 export default SortingQuotes;

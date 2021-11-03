@@ -5,6 +5,7 @@ import Data from "./components/Data";
 import TemperatureConverter from "./components/TemperatureConverter";
 import TestRef from "./components/TestRef";
 import RandomQuotes from "./components/RandomQuotes";
+import MouseControl from './components/MouseControl';
 
 class App extends React.Component {
   constructor(props) {
@@ -21,6 +22,8 @@ class App extends React.Component {
         <button onClick={() => this.myRef.current.focus()}>Click</button>
         <TestRef ref={this.myRef}/>
       </div>
+      <MouseControl render={(mouse) => <p>The current mouse position is ({mouse.x}, {mouse.y})</p>
+      }/>
       <RandomQuotes/>
     </div>
   }

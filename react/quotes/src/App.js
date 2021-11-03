@@ -1,92 +1,53 @@
 import React from 'react';
 import './App.css';
 import 'antd/dist/antd.css';
-import { Typography } from 'antd';
-import RandomQuotes from './components/RandomQuotes';
-import Search from './components/Search';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route, Link,
+} from 'react-router-dom';
 
-const { Title } = Typography;
+import QuotesListContainer from './components/QuotesListContainer';
+import RandomQuote from './components/RandomQuote';
+import ErrorBounderies from './components/ErrorBounderies';
 
-class App extends React.Component {
-    state = {
-      data: [],
-      defaultData: [],
-    }
-
-    componentDidMount() {
-      fetch('https://my.api.mockaroo.com/quotes.json', {
-        method: 'GET',
-        headers: {
-          'X-API-KEY': '2b9e9350',
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      })
-        .then((res) => res.json())
-        .then((resData) => {
-          this.setState({
-            data: resData,
-            defaultData: resData,
-          });
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-        });
-    }
-
-  handleSortListUp = () => {
-    this.setState((prevState) => {
-      const newArr = [...prevState.data];
-      newArr.sort((a, b) => (b.name > a.name ? 1 : -1));
-
-      return ({
-        data: newArr,
-      });
-    });
-  }
-
-  handleSortListDown = () => {
-    this.setState((prevState) => {
-      const newArr = [...prevState.data];
-      newArr.sort((a, b) => (a.name > b.name ? 1 : -1));
-
-      return ({
-        data: newArr,
-      });
-    });
-  }
-
-  handleChangeInput = (e) => {
-    const { value } = e.target;
-    console.log(value);
-  }
-
-  handleReset = () => {
-    const { defaultData } = this.state;
-    this.setState({
-      data: defaultData,
-    });
-  }
-
-  render() {
-    const {
-      data,
-    } = this.state;
-    return (
+// eslint disable
+function App() {
+  return (
+    <ErrorBounderies>
       <div className="App">
-        <Title className="App-h1">Random Quotes</Title>
-        <div className="App-container">
-          <Search handleChangeInput={this.handleChangeInput} />
-          <RandomQuotes
-            data={data}
-            handleSortListUp={this.handleSortListUp}
-            handleSortListDown={this.handleSortListDown}
-            handleReset={this.handleReset}
-          />
-        </div>
+        <Router>
+          <Switch>
+            <Route path="/quotes/:id">
+              <RandomQuote />
+            </Route>
+            <Route exact path="/">
+              <div>
+                <h1>Home Page</h1>
+                <Link to="/quotes">
+                  All Quotes
+                </Link>
+                <br />
+                <Link to="/quotes/edit">
+                  All Edit Quotes
+                </Link>
+              </div>
+            </Route>
+            <Route path="/quotes">
+              <QuotesListContainer />
+            </Route>
+            <Route exact strict path="/quotes/edit">
+              <QuotesListContainer />
+            </Route>
+          </Switch>
+        </Router>
       </div>
-    );
-  }
+    </ErrorBounderies>
+  );
 }
 
 export default App;
+
+// hw
+// 1 - add loader
+// 2 - edit quote

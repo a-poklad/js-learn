@@ -3,12 +3,14 @@ import {
   Button,
   Input,
 } from 'antd';
-import { InteractionOutlined, SearchOutlined } from '@ant-design/icons';
+import { SearchOutlined } from '@ant-design/icons';
 import PropTypes from 'prop-types';
 
 function Search(props) {
   const {
     handleChangeInput,
+    inputValue,
+    getRandomQuote,
   } = props;
   return (
     <div className="App-search-wr">
@@ -16,17 +18,17 @@ function Search(props) {
         <Input
           name="create"
           size="large"
-          prefix={<InteractionOutlined />}
+          prefix={<SearchOutlined />}
           type="text"
           placeholder="Search"
+          value={inputValue}
           onChange={handleChangeInput}
         />
       </label>
       <Button
         type="primary"
-        icon={<SearchOutlined />}
         size="large"
-        // onClick={handleReset}
+        onClick={getRandomQuote}
       >
         Get random quote
       </Button>
@@ -36,11 +38,15 @@ function Search(props) {
 }
 
 Search.propTypes = {
+  inputValue: PropTypes.string,
   handleChangeInput: PropTypes.func,
+  getRandomQuote: PropTypes.func,
 };
 
 Search.defaultProps = {
+  inputValue: '',
   handleChangeInput: () => {},
+  getRandomQuote: () => {},
 };
 
 export default Search;

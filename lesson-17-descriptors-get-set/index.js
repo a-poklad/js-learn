@@ -100,10 +100,20 @@ const add = (a) => {
     return fn
 }
 
-add(2)(2)(4)
+// add(2)(2)(4)
 
-
-
+// const addTwoNumbers = function(l1, l2) {
+//     const num1 = parseInt(l1.reverse().join(''), 10);
+//     const num2 = parseInt(l2.reverse().join(''), 10);
+//
+//     const sumNumbers = num1 + num2;
+//     const result = sumNumbers.toString().split('').reverse();
+//     return result.map(num => +num);
+// };
+//
+// console.log(addTwoNumbers([2,4,3], [5,6,4]));
+// console.log(addTwoNumbers([0], [0]));
+// console.log(addTwoNumbers([9,9,9,9,9,9,9], [9,9,9,9]));
 
 
 
