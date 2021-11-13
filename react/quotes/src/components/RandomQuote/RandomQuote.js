@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 
 function RandomQuote() {
   const location = useLocation();
+
   const { id, name, quote } = location.state;
   return (
     <>

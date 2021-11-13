@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'antd/dist/antd.css';
 import { Typography } from 'antd';
-import { withRouter } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import { withRouter, useHistory } from 'react-router-dom';
 import RandomQuotesList from '../RandomQuotesList';
 import Search from '../Search';
 import BUTTON_STATE from '../../constans';
@@ -12,24 +11,24 @@ import debounce from '../../utils/debounce';
 
 const { Title } = Typography;
 
-class QuotesListContainer extends React.Component {
-  state = {
-    data: [],
-    dataSorting: [],
-    nameSortingButtonState: BUTTON_STATE.DEFAULT,
-    quoteSortingButtonState: BUTTON_STATE.DEFAULT,
-    inputValue: '',
-  }
+const QuotesListContainer = () => {
+  const [data, setData] = useState(() => JSON.parse(sessionStorage.getItem('list')) || []);
+  const [dataSorting, setDataSorting] = useState([]);
+  const [nameSortingButtonState, setNameSortingButtonState] = useState(BUTTON_STATE.DEFAULT);
+  const [quoteSortingButtonState, setQuoteSortingButtonState] = useState(BUTTON_STATE.DEFAULT);
+  const [inputValue, setInputValue] = useState('');
+  const history = useHistory();
 
-  componentDidMount() {
-    const inputValue = JSON.parse(sessionStorage.getItem('inputValue'));
-    if (sessionStorage.getItem('list') && inputValue) {
-      this.setState(() => ({
-        data: JSON.parse(sessionStorage.getItem('list')),
-        inputValue,
-      }), () => {
-        this.handleChangeInput(inputValue);
-      });
+  const handleChangeInput = (value) => {
+    const filteredByQuotes = data.filter((item) => item.quote.toLowerCase().includes(value.toLowerCase()) || item.name.toLowerCase().includes(value.toLowerCase()));
+    setDataSorting(filteredByQuotes);
+  };
+
+  useEffect(() => {
+    const inputValueStorage = JSON.parse(sessionStorage.getItem('inputValue'));
+    if (sessionStorage.getItem('list') && inputValueStorage) {
+      setInputValue(inputValueStorage);
+      handleChangeInput(inputValueStorage);
     } else {
       fetch('https://my.api.mockaroo.com/quotes.json', {
         method: 'GET',
@@ -42,129 +41,87 @@ class QuotesListContainer extends React.Component {
         .then((res) => res.json())
         .then((resData) => {
           sessionStorage.setItem('list', JSON.stringify(resData));
-          this.setState({
-            data: resData,
-            dataSorting: resData,
-          });
+          setData(resData);
+          setDataSorting(resData);
         })
         .catch((error) => {
           console.error('Error:', error);
         });
     }
-  }
+  }, []);
 
-  handleSortList = (key) => {
-    if (key === 'name') {
-      this.setState({
-        quoteSortingButtonState: BUTTON_STATE.DEFAULT,
-      });
-    } else {
-      this.setState({
-        nameSortingButtonState: BUTTON_STATE.DEFAULT,
-      });
-    }
-    this.setState((prevState) => {
-      const newArr = [...prevState.data];
+  const handleSortList = (key, buttonState, setButtonState) => {
+    const newArr = [...data];
+    setButtonState(BUTTON_STATE.DEFAULT);
 
-      if (prevState[`${key}SortingButtonState`] === BUTTON_STATE.DEFAULT) {
-        newArr.sort((a, b) => (a[key] > b[key] ? 1 : -1));
-        return ({
-          dataSorting: newArr,
-          [`${key}SortingButtonState`]: BUTTON_STATE.UP,
-        });
-      }
-      if (prevState[`${key}SortingButtonState`] === BUTTON_STATE.UP) {
-        newArr.sort((a, b) => (b[key] > a[key] ? 1 : -1));
-        return ({
-          dataSorting: newArr,
-          [`${key}SortingButtonState`]: BUTTON_STATE.DOWN,
-        });
-      }
-
+    if (buttonState === BUTTON_STATE.DEFAULT) {
       newArr.sort((a, b) => (a[key] > b[key] ? 1 : -1));
-      sessionStorage.setItem('list', JSON.stringify(newArr));
-      return ({
-        dataSorting: newArr,
-        [`${key}SortingButtonState`]: BUTTON_STATE.UP,
-      });
-    });
-  }
+      setDataSorting(newArr);
+      setButtonState(BUTTON_STATE.UP);
+      return;
+    }
 
-  handleChangeInput = (value) => {
-    const { data } = this.state;
-    const filteredByQuotes = data.filter((item) => item.quote.toLowerCase().includes(value.toLowerCase()));
-    this.setState({
-      dataSorting: filteredByQuotes,
-    });
-  }
+    if (buttonState === BUTTON_STATE.UP) {
+      newArr.sort((a, b) => (b[key] > a[key] ? 1 : -1));
+      setDataSorting(newArr);
+      setButtonState(BUTTON_STATE.DOWN);
+      return;
+    }
 
-  // eslint-disable-next-line react/sort-comp
-  debounceChange = debounce((value) => this.handleChangeInput(value), 2000);
+    newArr.sort((a, b) => (a[key] > b[key] ? 1 : -1));
+    sessionStorage.setItem('list', JSON.stringify(newArr));
+    setDataSorting(newArr);
+    setButtonState(BUTTON_STATE.UP);
+  };
 
-  handleChangeInputValue = (e) => {
+  const debounceChange = debounce((value) => handleChangeInput(value), 2000);
+
+  const handleChangeInputValue = (e) => {
     sessionStorage.setItem('inputValue', JSON.stringify(e.target.value));
-    this.setState({
-      inputValue: e.target.value,
-    });
-    this.debounceChange(e.target.value);
-  }
+    setInputValue(e.target.value);
+    debounceChange(e.target.value);
+  };
 
-  handleReset = () => {
-    const { data } = this.state;
+  const handleReset = () => {
     sessionStorage.setItem('list', JSON.stringify(data));
     sessionStorage.setItem('inputValue', JSON.stringify(''));
-    this.setState({
-      dataSorting: data,
-      nameSortingButtonState: BUTTON_STATE.DEFAULT,
-      quoteSortingButtonState: BUTTON_STATE.DEFAULT,
-      inputValue: '',
-    });
-  }
+    setDataSorting(data);
+    setNameSortingButtonState(BUTTON_STATE.DEFAULT);
+    setQuoteSortingButtonState(BUTTON_STATE.DEFAULT);
+    setInputValue('');
+  };
 
-  getRandomQuote = () => {
-    const { dataSorting } = this.state;
-    const { history } = this.props;
-    const randomNumber = getRandomInRange(dataSorting.length);
+  const getRandomQuote = () => {
+    const randomNumber = getRandomInRange(dataSorting.length - 1);
     const randomQuote = dataSorting.filter((item, index) => index === randomNumber);
-    console.log(randomQuote[0].id);
     history.push({ pathname: `/quotes/${randomQuote[0].id}`, state: randomQuote[0] });
-  }
+  };
 
-  render() {
-    const {
-      dataSorting,
-      nameSortingButtonState,
-      quoteSortingButtonState,
-      inputValue,
-    } = this.state;
-    return (
-      <>
-        <Title className="App-h1">Random Quotes</Title>
-        <div className="App-container">
-          <Search
-            inputValue={inputValue}
-            handleChangeInput={this.handleChangeInputValue}
-            getRandomQuote={this.getRandomQuote}
-          />
-          <SortingQuotes
-            data={dataSorting}
-            handleSortList={this.handleSortList}
-            handleReset={this.handleReset}
-            nameSortingButtonState={nameSortingButtonState}
-            quoteSortingButtonState={quoteSortingButtonState}
-          />
-          <RandomQuotesList
-            inputValue={inputValue}
-            dataSorting={dataSorting}
-          />
-        </div>
-      </>
-    );
-  }
-}
-
-QuotesListContainer.propTypes = {
-  history: PropTypes.objectOf(PropTypes.any).isRequired,
+  return (
+    <>
+      <Title className="App-h1">Random Quotes</Title>
+      <div className="App-container">
+        <Search
+          inputValue={inputValue}
+          handleChangeInput={handleChangeInputValue}
+          getRandomQuote={getRandomQuote}
+        />
+        <SortingQuotes
+          data={dataSorting}
+          handleSortList={handleSortList}
+          handleReset={handleReset}
+          nameSortingButtonState={nameSortingButtonState}
+          quoteSortingButtonState={quoteSortingButtonState}
+          setNameSortingButtonState={setNameSortingButtonState}
+          setQuoteSortingButtonState={setQuoteSortingButtonState}
+        />
+        <RandomQuotesList
+          inputValue={inputValue}
+          dataSorting={dataSorting}
+        />
+      </div>
+    </>
+  );
 };
 
 const ShowTheLocationWithRouter = withRouter(QuotesListContainer);
