@@ -25,6 +25,8 @@ function SortingQuotes(props) {
     handleReset,
     quoteSortingButtonState,
     nameSortingButtonState,
+    setNameSortingButtonState,
+    setQuoteSortingButtonState,
   } = props;
   return (
     <div className="App-sort-btn-wr">
@@ -34,7 +36,7 @@ function SortingQuotes(props) {
         type="primary"
         icon={getIcon(nameSortingButtonState)}
         size="large"
-        onClick={() => handleSortList('name')}
+        onClick={() => handleSortList('name', nameSortingButtonState, setNameSortingButtonState)}
       >
         Sort by name
       </Button>
@@ -43,7 +45,7 @@ function SortingQuotes(props) {
         type="primary"
         icon={getIcon(quoteSortingButtonState)}
         size="large"
-        onClick={() => handleSortList('quote')}
+        onClick={() => handleSortList('quote', quoteSortingButtonState, setQuoteSortingButtonState)}
       >
         Sort by quote
       </Button>
@@ -63,6 +65,8 @@ function SortingQuotes(props) {
 SortingQuotes.propTypes = {
   handleSortList: PropTypes.func,
   handleReset: PropTypes.func,
+  setNameSortingButtonState: PropTypes.func,
+  setQuoteSortingButtonState: PropTypes.func,
   quoteSortingButtonState: PropTypes.oneOfType({
     UP: PropTypes.string,
     DOWN: PropTypes.string,
@@ -78,6 +82,8 @@ SortingQuotes.propTypes = {
 SortingQuotes.defaultProps = {
   handleSortList: () => {},
   handleReset: () => {},
+  setNameSortingButtonState: () => {},
+  setQuoteSortingButtonState: () => {},
   quoteSortingButtonState: {
     UP: '',
     DOWN: '',
